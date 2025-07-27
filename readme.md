@@ -20,17 +20,17 @@ Technologies used:
 
 ```
 .
-├── dockerfile
-├── .dockerignore
-├── solution.py
-├── requirements.txt
+├── dockerfile                 # Docker instructions
+├── .dockerignore              # Ignore output/models etc. during docker builds
+├── solution.py                # Main script
+├── requirements.txt           # All Python dependencies
 ├── input/
-│   ├── input.json              # Contains persona, task, and document info
-│   └── <document>.pdf/html     # Supporting documents
+│   ├── input.json             # Contains persona, task, and document info
+│   └── <document>.pdf/html    # Supporting documents
 ├── models/
-│   ├── tinyllama/              # Quantized TinyLLaMA model
-│   └── bge-small-en-v1.5/      # Embedding model folder
-├── output/                     # Auto-created for results
+│   ├── tinyllama/             # Quantized TinyLLaMA model
+│   └── bge-small-en-v1.5/     # Embedding model folder
+├── output/                    # Auto-created for results
 ```
 
 ---
@@ -62,6 +62,16 @@ input/
 
 ```bash
 docker build -t adobe-1b-solution .
+```
+
+Make sure your `dockerfile` includes:
+
+```Dockerfile
+FROM python:3.10-slim
+WORKDIR /app
+COPY . .
+RUN pip install --no-cache-dir -r requirements.txt
+CMD ["python", "solution.py"]
 ```
 
 ---
@@ -130,9 +140,39 @@ docker run --rm -v ${PWD}:/app adobe-1b-solution
 
 ---
 
+## 📦 Python Dependencies
+
+Make sure `requirements.txt` includes:
+
+```txt
+langchain-community
+langchain-huggingface
+llama-cpp-python
+transformers
+sentence-transformers
+torch
+faiss-cpu
+PyPDF2
+pypdf
+unstructured
+huggingface-hub
+numpy
+pathlib
+```
+
+---
+
 ## 📝 Notes
 
 * Models must be downloaded manually and stored in `models/`
 * Uses `TinyLLaMA` (GGUF format) for LLM inference
 * Designed for **offline CPU** execution
 * All results saved in structured `JSON` format
+* ⚠️ **Model files are pushed using Git LFS**
+
+  * Clone the repo like this:
+
+    ```bash
+    git lfs install
+    git clone https://github.com/DarkMatter1217/Adobe_1B.git
+    ```
