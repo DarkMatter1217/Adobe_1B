@@ -1,0 +1,13 @@
+langchain-community
+langchain-huggingface
+llama-cpp-python
+transformers
+sentence-transformers
+torch
+faiss-cpu
+PyPDF2
+pypdf
+unstructured
+huggingface-hub
+numpy
+pathlib
